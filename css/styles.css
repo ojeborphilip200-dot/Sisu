@@ -9,7 +9,7 @@
   --color-border: #e3e7ee;
   --radius: 14px;
   --space: 16px;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -40,6 +40,11 @@ html, body {
     box-shadow: 0 20px 60px rgba(20, 30, 60, 0.18);
   }
 }
+
+/* Full-screen routes (e.g. onboarding) hide the app header and tab bar. */
+.device.fullscreen .app-header,
+.device.fullscreen .tab-bar { display: none; }
+.device.fullscreen .app-main { padding: 0; }
 
 .app-header {
   padding: var(--space);

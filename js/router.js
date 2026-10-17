@@ -6,7 +6,7 @@ export function startRouter({ routes, notFound, outlet, onNavigate }) {
     const screen = route ? route.screen : notFound;
     outlet.innerHTML = screen();
     outlet.scrollTop = 0;
-    onNavigate?.(path);
+    onNavigate?.(path, route);
   }
 
   window.addEventListener("hashchange", render);
