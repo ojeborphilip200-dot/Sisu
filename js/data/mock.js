@@ -2,11 +2,15 @@
 // `category` matches an id in interests.js; `source` matches an id in sources.js.
 // `intlGoing` = how many of the people going are international students;
 // `countries` = flag codes of a few of them (flag-icons codes).
+// `town` = "campus" or a place id from places.js; `lat`/`lon` = where it is on the map;
+// `start`/`end` = 24h times used for travel planning; `buddies` = students from campus going
+// who are open to traveling together (off-campus events only).
 export const events = [
   {
     id: "coffee-hour",
     title: "International Coffee Hour",
     category: "food",
+    town: "campus", lat: 42.4689, lon: -75.0655, start: "16:00", end: "18:00",
     onCampus: true,
     when: "Fri, Oct 24 · 4:00–6:00 PM",
     where: "Campus Center, Room 375",
@@ -20,6 +24,7 @@ export const events = [
     id: "board-games",
     title: "Board Game Night",
     category: "gaming",
+    town: "campus", lat: 42.4679, lon: -75.064, start: "19:00", end: "22:00",
     onCampus: true,
     when: "Sat, Oct 25 · 7:00–10:00 PM",
     where: "Library, Group Study Room 2",
@@ -33,6 +38,7 @@ export const events = [
     id: "soccer-pickup",
     title: "Intramural Soccer Pickup",
     category: "sports",
+    town: "campus", lat: 42.467, lon: -75.068, start: "14:00", end: "16:00",
     onCampus: true,
     when: "Sun, Oct 26 · 2:00–4:00 PM",
     where: "West Field",
@@ -46,6 +52,7 @@ export const events = [
     id: "open-mic",
     title: "Open Mic Night",
     category: "music",
+    town: "campus", lat: 42.4692, lon: -75.0635, start: "20:00", end: "22:30",
     onCampus: true,
     when: "Thu, Oct 23 · 8:00–10:30 PM",
     where: "Student Union Lounge",
@@ -59,6 +66,7 @@ export const events = [
     id: "watercolor",
     title: "Beginner Watercolor Workshop",
     category: "arts",
+    town: "campus", lat: 42.4683, lon: -75.0662, start: "18:00", end: "19:30",
     onCampus: true,
     when: "Wed, Oct 22 · 6:00–7:30 PM",
     where: "Fine Arts Building, Studio 104",
@@ -72,6 +80,7 @@ export const events = [
     id: "hackathon",
     title: "Hackathon Kickoff Mixer",
     category: "gaming",
+    town: "campus", lat: 42.4695, lon: -75.0648, start: "18:00", end: "20:00",
     onCampus: true,
     when: "Fri, Oct 24 · 6:00–8:00 PM",
     where: "Engineering Hall Atrium",
@@ -85,9 +94,10 @@ export const events = [
     id: "food-festival",
     title: "Downtown Food Festival",
     category: "food",
+    town: "oneonta", lat: 42.4521, lon: -75.061, start: "12:00", end: "18:00", buddies: 4,
     onCampus: false,
     when: "Sat, Oct 25 · 12:00–6:00 PM",
-    where: "Riverside Park, downtown",
+    where: "Riverside Park, downtown Oneonta",
     description:
       "Over 30 local food vendors, including many family-run spots serving dishes from around the world. Free entry, with live music on the main stage. About 15 minutes by city bus from campus.",
     going: 64, intlGoing: 19, countries: ["et", "th", "lb", "mx", "pe"],
@@ -98,9 +108,10 @@ export const events = [
     id: "fun-run",
     title: "Community 5K Fun Run",
     category: "sports",
+    town: "oneonta", lat: 42.444, lon: -75.056, start: "09:00", end: "11:00", buddies: 3,
     onCampus: false,
     when: "Sun, Oct 26 · 9:00–11:00 AM",
-    where: "Riverside Trail, north entrance",
+    where: "Riverside Trail, Oneonta",
     description:
       "An untimed, all-paces 5K along the river. Walkers welcome. Registration is free for students with ID, and there's a post-race breakfast.",
     going: 33, intlGoing: 7, countries: ["ke", "gb", "es"],
@@ -111,9 +122,10 @@ export const events = [
     id: "jazz",
     title: "Live Jazz at the Café",
     category: "music",
+    town: "oneonta", lat: 42.4535, lon: -75.0625, start: "21:00", end: "23:00", buddies: 1,
     onCampus: false,
     when: "Fri, Oct 24 · 9:00–11:00 PM",
-    where: "Corner Café, downtown",
+    where: "Corner Café, downtown Oneonta",
     description:
       "A local trio plays standards and originals in a cozy café. No cover charge, and you only pay for what you order. A quieter option if loud parties aren't your thing.",
     going: 18, intlGoing: 4, countries: ["fr", "jp"],
@@ -124,14 +136,57 @@ export const events = [
     id: "gallery-walk",
     title: "Third Thursday Gallery Walk",
     category: "arts",
+    town: "albany", lat: 42.656, lon: -73.762, start: "17:00", end: "20:00", buddies: 2,
     onCampus: false,
     when: "Thu, Oct 23 · 5:00–8:00 PM",
-    where: "Arts District galleries",
+    where: "Arts District galleries, Albany",
     description:
       "Galleries open their doors for a free evening walk with artist talks and light refreshments. Start at any gallery, and maps are handed out at each stop.",
     going: 29, intlGoing: 9, countries: ["it", "br", "cn"],
-    source: "arts-council", postingPath: "/events/gallery-walk",
+    source: "albany-calendar", postingPath: "/events/gallery-walk",
     found: "Oct 12",
+  },
+  {
+    id: "night-market",
+    title: "International Night Market",
+    category: "food",
+    town: "albany", lat: 42.6505, lon: -73.749, start: "17:00", end: "21:00", buddies: 4,
+    onCampus: false,
+    when: "Sat, Oct 25 · 5:00–9:00 PM",
+    where: "Riverfront plaza, downtown Albany",
+    description:
+      "Dozens of food stalls from around the world, plus dance performances and a lantern walk at dusk. A big, lively event, and a good one to go to with a group.",
+    going: 210, intlGoing: 64, countries: ["ph", "ng", "in", "kr", "co"],
+    source: "albany-calendar", postingPath: "/events/night-market",
+    found: "Oct 13",
+  },
+  {
+    id: "indie-show",
+    title: "Indie Night at the Music Hall",
+    category: "music",
+    town: "albany", lat: 42.651, lon: -73.754, start: "19:30", end: "22:30", buddies: 3,
+    onCampus: false,
+    when: "Fri, Oct 24 · 7:30–10:30 PM",
+    where: "Downtown music hall, Albany",
+    description:
+      "Three local indie bands on one bill. Student tickets are discounted with ID at the door. All ages, and the hall is about a 10-minute walk from the bus station.",
+    going: 85, intlGoing: 9, countries: ["gb", "jp", "br"],
+    source: "albany-calendar", postingPath: "/events/indie-night",
+    found: "Oct 15",
+  },
+  {
+    id: "harvest-festival",
+    title: "Lakeside Harvest Festival",
+    category: "food",
+    town: "cooperstown", lat: 42.699, lon: -74.923, start: "11:00", end: "16:00", buddies: 2,
+    onCampus: false,
+    when: "Sun, Oct 26 · 11:00 AM–4:00 PM",
+    where: "Lakefront park, Cooperstown",
+    description:
+      "A small-town fall festival by the lake: apple cider, local farm stands, pumpkin carving and a craft fair. Very relaxed, and a classic upstate New York experience.",
+    going: 40, intlGoing: 6, countries: ["cn", "de"],
+    source: "cooperstown-listings", postingPath: "/events/harvest-festival",
+    found: "Oct 14",
   },
 ];
 

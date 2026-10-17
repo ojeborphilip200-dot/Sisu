@@ -1,5 +1,7 @@
 // Places the (simulated) Sisu AI scans for events. All names and URLs are fictional samples
 // for the prototype; example.edu / example.org are reserved demo domains.
+// `place` = which town a community source covers (see places.js). Sources for a town are only
+// checked when it's within the student's area or saved as a place.
 export const sources = [
   {
     id: "campus-calendar",
@@ -30,7 +32,8 @@ export const sources = [
   },
   {
     id: "city-calendar",
-    name: "City Community Calendar",
+    place: "oneonta",
+    name: "Oneonta Community Calendar",
     kind: "Municipal events listing",
     scope: "community",
     url: "https://calendar.example.org",
@@ -39,6 +42,7 @@ export const sources = [
   },
   {
     id: "arts-council",
+    place: "oneonta",
     name: "Regional Arts Council",
     kind: "Nonprofit arts listings",
     scope: "community",
@@ -48,12 +52,33 @@ export const sources = [
   },
   {
     id: "parks-rec",
+    place: "oneonta",
     name: "Parks & Recreation",
     kind: "City programs & races",
     scope: "community",
     url: "https://parks.example.org",
     method: "Reads the programs listing",
     lastScanned: "6 hours ago",
+  },
+  {
+    id: "albany-calendar",
+    place: "albany",
+    name: "Albany-Area Events Listing",
+    kind: "Community events listing",
+    scope: "community",
+    url: "https://albany-events.example.org",
+    method: "Reads the public calendar feed",
+    lastScanned: "4 hours ago",
+  },
+  {
+    id: "cooperstown-listings",
+    place: "cooperstown",
+    name: "Cooperstown Visitor Listings",
+    kind: "Local tourism events page",
+    scope: "community",
+    url: "https://visit-cooperstown.example.org",
+    method: "Reads the public events page",
+    lastScanned: "1 day ago",
   },
 ];
 

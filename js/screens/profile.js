@@ -1,6 +1,8 @@
 // Profile: everything Sisu stores or uses about the student, how it's used,
 // and controls to edit, delete, or download it. Transparency is the point of this screen.
-import { interests, locations } from "../data/interests.js";
+import { interests } from "../data/interests.js";
+import { AreaEditor, mountAreaEditor } from "../components/AreaEditor.js";
+import { placeById, transportModes, describeArea } from "../data/places.js";
 import { languages, countries, labelFor } from "../data/background.js";
 import { sourceById } from "../data/sources.js";
 import { eventById } from "../data/mock.js";
@@ -60,7 +62,7 @@ export function ProfileScreen() {
       <a href="#" data-jump="d-account">Account</a>
       <a href="#" data-jump="d-background">Language & country</a>
       <a href="#" data-jump="d-interests">Interests</a>
-      <a href="#" data-jump="d-location">Location</a>
+      <a href="#" data-jump="d-location">Area & travel</a>
       <a href="#" data-jump="d-sources">Sources</a>
       <a href="#" data-jump="d-events">Events</a>
       <a href="#" data-jump="d-goals">Social goals</a>
@@ -109,13 +111,26 @@ export function ProfileScreen() {
     ${Section({
       id: "d-location",
       title: "Where you want to explore",
-      uses: "If you choose on campus only, community events are hidden from Picked for you.",
-      body: `<div class="toggle-chips">${locations
-        .map((l) => {
-          const on = profile.location === l.id;
-          return `<button type="button" class="toggle-chip ${on ? "on" : ""}" data-location="${l.id}" aria-pressed="${on}">${l.emoji} ${l.label}</button>`;
-        })
-        .join("")}</div>`,
+      uses: "Events outside your range and saved places are hidden from Picked for you. Without a car, events with no bus, or no bus home, are flagged and ranked a little lower, never hidden. Sisu never tracks where you actually are.",
+      body: `${AreaEditor(profile.area)}<p class="data-hint">Changes save right away.</p>`,
+    })}
+
+    ${Section({
+      id: "d-buddies",
+      title: "Ride buddy visibility",
+      uses: "Other verified students from your campus going to the same event can see that you're open to traveling together. Nothing else about you is shown until you both confirm.",
+      empty: "You're not visible as a ride buddy for any events.",
+      body:
+        Object.keys(profile.rideBuddies).length &&
+        `<ul class="data-list">${Object.keys(profile.rideBuddies)
+          .map(
+            (id) => `
+          <li>
+            <span><strong>${eventById[id]?.title ?? id}</strong><small>Visible as open to traveling together</small></span>
+            ${deleteBtn(`data-buddy="${id}"`, "Stop being visible for this event")}
+          </li>`
+          )
+          .join("")}</ul>`,
     })}
 
     ${Section({
@@ -154,7 +169,7 @@ export function ProfileScreen() {
               <strong>${e?.title ?? id}</strong>
               <small>${plan.checkedIn ? "Attended · checked in" : "Planned"} · Confidence before: ${before.emoji} ${before.label}${
                 after ? ` · after: ${after.emoji} ${after.label}` : ""
-              }</small>
+              }${plan.travel ? ` · Getting there: ${plan.travel.label}` : ""}</small>
             </span>
             ${deleteBtn(`data-plan="${id}"`, "Delete this event and its goals")}
           </li>`;
@@ -229,13 +244,20 @@ function exportData() {
     preferredLanguage: labelFor(languages, profile.language),
     countryOfOrigin: labelFor(countries, profile.country),
     interests: profile.interests.map((id) => interests.find((i) => i.id === id)?.label ?? id),
-    location: locations.find((l) => l.id === profile.location)?.label ?? null,
+    area: {
+      summary: describeArea(profile.area),
+      radiusMiles: profile.area.radius,
+      savedPlaces: profile.area.places.map((id) => placeById[id]?.name ?? id),
+      gettingAround: transportModes.find((t) => t.id === profile.area.transport)?.label ?? null,
+    },
+    rideBuddyVisibleFor: Object.keys(profile.rideBuddies).map((id) => eventById[id]?.title ?? id),
     sourcePreferences: Object.entries(profile.sourcePrefs).map(([id, pref]) => ({ source: sourceById[id]?.name ?? id, preference: pref })),
     events: Object.entries(profile.plans).map(([id, plan]) => ({
       event: eventById[id]?.title ?? id,
       status: plan.checkedIn ? "attended" : "planned",
       confidenceBefore: plan.before,
       confidenceAfter: plan.after,
+      gettingThere: plan.travel?.label ?? null,
     })),
     socialGoals: profile.goals.map((g) => ({
       goal: challengeById[g.challenge]?.title ?? g.challenge,
@@ -319,8 +341,12 @@ ProfileScreen.mount = (root) => {
     )
   );
 
-  on("[data-location]", (el) => {
-    saveProfile({ location: el.dataset.location });
+  // The map editor updates itself; re-rendering would reset the map, so only save here.
+  mountAreaEditor(root.querySelector("#d-location"), getProfile().area, (area) => saveProfile({ area }));
+
+  on("[data-buddy]", (el) => {
+    const { [el.dataset.buddy]: _, ...rest } = getProfile().rideBuddies;
+    saveProfile({ rideBuddies: rest });
     rerender();
   });
 
@@ -410,7 +436,7 @@ ProfileScreen.mount = (root) => {
     confirmSheet(
       {
         title: "Delete all your data?",
-        body: "This permanently erases your language and country, interests, settings, source preferences, events, goals, points, and Coach conversations. It can't be undone. You may want to download your data first.",
+        body: "This permanently erases your language and country, interests, area and travel settings, ride buddy visibility, source preferences, events, goals, points, and Coach conversations. It can't be undone. You may want to download your data first.",
         confirmLabel: "Yes, delete everything",
         danger: true,
       },

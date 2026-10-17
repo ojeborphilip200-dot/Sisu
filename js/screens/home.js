@@ -3,6 +3,7 @@ import { events, eventById } from "../data/mock.js";
 import { interests } from "../data/interests.js";
 import { getProfile } from "../state.js";
 import { pickedFor } from "../curation.js";
+import { describeArea } from "../data/places.js";
 
 // Top-of-feed nudge toward real-world connection: check in on a past plan, or try the coach.
 function Nudge(profile) {
@@ -51,14 +52,14 @@ export function HomeScreen() {
   return `
     <h1>Picked for you</h1>
     <div class="chips">${labels}</div>
-    <p class="muted">${profile.location === "community" ? "On campus and around town" : "On campus"} ·
-      <a href="#/quiz/interests">Edit</a></p>
+    <p class="muted">📍 ${describeArea(profile.area)}${profile.area.transport === "car" ? " · 🚗" : " · 🚶 no car"} ·
+      <a href="#/profile">Edit</a></p>
     ${Nudge(profile)}
     <p class="feed-explainer">✨ Sisu AI found these on campus and community calendars and ranked them by
       your interests. Tap any event to see exactly why it's here. <a href="#/sources">Sources</a></p>
     ${
       picks.length
-        ? picks.map((p) => EventCard(p.event, { reason: summarize(p.reasons) })).join("")
+        ? picks.map((p) => EventCard(p.event, { reason: summarize(p.reasons), transport: profile.area.transport })).join("")
         : `<p class="muted">No matches yet. Try adding more interests.</p>`
     }
     <a href="#/events" class="button">Browse all events</a>

@@ -8,12 +8,14 @@ const DEFAULTS = {
   language: null,
   country: null,
   interests: [],
-  location: null,
+  // area: { radius (mi from campus), places: [place ids], transport: "no-car" | "car" } — see data/places.js.
+  area: { radius: 5, places: [], transport: "no-car" },
   sourcePrefs: {},
   plans: {},
   goals: [],
   coachHistory: [],
   rememberChats: true,
+  rideBuddies: {}, // { [eventId]: true } — events where the student is open to traveling together.
 };
 
 export function getProfile() {

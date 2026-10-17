@@ -23,6 +23,8 @@ export const challenges = [
     tip: "“I'm going to ___ on Friday. Want to come?” Low pressure, and you both get a familiar face there." },
   { id: "coffee", level: 3, emoji: "☕", title: "Ask someone to get coffee after",
     tip: "“I'm grabbing coffee after this. Want to come?” If they can't, that's okay. Asking is the win." },
+  { id: "travel-together", level: 3, emoji: "🚌", title: "Travel to an event with someone",
+    tip: "“I saw you're going to ___ too. Want to take the bus together?” A shared trip gives you built-in time to talk." },
   { id: "swap-contact", level: 3, emoji: "📱", title: "Swap contact info with someone",
     tip: "“Can I get your Instagram/number so we can find each other at the next one?”" },
 ];

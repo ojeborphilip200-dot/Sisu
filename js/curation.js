@@ -2,6 +2,8 @@
 // Every rule that affects an event adds a plain-language reason, so the app can show its work.
 import { interests } from "./data/interests.js";
 import { sourceById } from "./data/sources.js";
+import { placeById, fmtMiles, DEFAULT_AREA } from "./data/places.js";
+import { access, distanceFromCampus, townName } from "./travel.js";
 
 const interestById = Object.fromEntries(interests.map((i) => [i.id, i]));
 
@@ -21,15 +23,37 @@ export function explain(event, profile) {
     reasons.push({ effect: "block", text: `${interest.label} isn't one of your interests` });
   }
 
-  if (event.onCampus) {
+  // Location: inside the home-base radius, or in a saved place.
+  const area = { ...DEFAULT_AREA, ...profile.area };
+  const miles = distanceFromCampus(event);
+  if (event.town === "campus") {
     score += 1;
     reasons.push({ effect: "up", text: "It's on campus" });
-  } else if (profile.location === "community") {
+  } else if (miles <= area.radius) {
     score += 1;
-    reasons.push({ effect: "up", text: "It's in the community, and you opted in to exploring off campus" });
+    reasons.push({ effect: "up", text: `It's ${fmtMiles(miles)} from campus, within your ${area.radius} mi range` });
+  } else if (area.places.includes(event.town)) {
+    score += 1;
+    reasons.push({ effect: "up", text: `It's in ${townName(event)}, one of your saved places` });
   } else {
     include = false;
-    reasons.push({ effect: "block", text: "It's off campus, and you chose on-campus events only" });
+    const hint = placeById[event.town] ? ` Add ${townName(event)} as a saved place to see events there.` : "";
+    reasons.push({ effect: "block", text: `It's ${fmtMiles(miles)} away, outside your ${area.radius} mi range.${hint}` });
+  }
+
+  // Getting there without a car: flagged and ranked lower, never hidden.
+  if (area.transport !== "car" && event.town !== "campus") {
+    const a = access(event, area.transport);
+    if (a.noTransit) {
+      score -= 1;
+      reasons.push({
+        effect: "down",
+        text: `No bus goes there, so you'd need a ride${a.rideshare ? ` (rideshare ${a.rideshare.cost})` : ""} or a ride buddy`,
+      });
+    } else if (a.lateReturnOnly) {
+      score -= 1;
+      reasons.push({ effect: "down", text: `${a.lastBack}, so plan another way home` });
+    }
   }
 
   const intlShare = event.intlGoing / event.going;

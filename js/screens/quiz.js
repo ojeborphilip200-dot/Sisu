@@ -1,5 +1,6 @@
 // Three-step onboarding quiz shown after "Get started": background, interests, then location preference.
-import { interests, locations } from "../data/interests.js";
+import { interests } from "../data/interests.js";
+import { AreaEditor, mountAreaEditor } from "../components/AreaEditor.js";
 import { languages, countries } from "../data/background.js";
 import { getProfile, saveProfile } from "../state.js";
 
@@ -133,15 +134,12 @@ QuizInterestsScreen.mount = (root) => {
 };
 
 export function QuizLocationScreen() {
-  const { location: chosen } = getProfile();
   return QuizShell({
     step: 3,
     total: 3,
     title: "Where do you want to explore?",
-    subtitle: "You can change this anytime.",
-    body: `<div class="option-list">${locations
-      .map((l) => OptionTile({ ...l, selected: chosen === l.id }))
-      .join("")}</div>`,
+    subtitle: "Pick how far from campus you'd go, and any towns you'd travel to. You can change this anytime.",
+    body: AreaEditor(getProfile().area),
     backHref: "#/quiz/interests",
     nextLabel: "Show my events",
   });
@@ -149,23 +147,12 @@ export function QuizLocationScreen() {
 
 QuizLocationScreen.mount = (root) => {
   const next = root.querySelector(".quiz-next");
-  let choice = getProfile().location;
-  next.disabled = !choice;
-
-  root.querySelectorAll(".option").forEach((tile) => {
-    tile.addEventListener("click", () => {
-      choice = tile.dataset.id;
-      root.querySelectorAll(".option").forEach((t) => {
-        const on = t === tile;
-        t.classList.toggle("selected", on);
-        t.setAttribute("aria-pressed", on);
-      });
-      next.disabled = false;
-    });
-  });
+  let area = getProfile().area;
+  next.disabled = false; // Sensible defaults (5 mi, no car) are pre-selected.
+  mountAreaEditor(root, area, (a) => (area = a));
 
   next.addEventListener("click", () => {
-    saveProfile({ location: choice });
+    saveProfile({ area });
     location.hash = "#/home";
   });
 };

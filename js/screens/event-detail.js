@@ -1,12 +1,15 @@
 import { eventById } from "../data/mock.js";
 import { sourceById } from "../data/sources.js";
 import { interests } from "../data/interests.js";
-import { getProfile } from "../state.js";
+import { getProfile, saveProfile } from "../state.js";
 import { explain } from "../curation.js";
 import { SourcePrefButtons, bindSourcePrefButtons } from "../components/SourcePrefButtons.js";
 import { openPlanSheet, openCheckInSheet } from "../components/PlanFlow.js";
 import { challengeById, confidenceScale } from "../data/challenges.js";
 import { cancelPlan } from "../social.js";
+import { GettingThere } from "../components/GettingThere.js";
+import { modeEmoji } from "../data/transit.js";
+import { fmtTime } from "../travel.js";
 import { NotFoundScreen } from "./not-found.js";
 
 // "I'm going" area: the call to action, or the student's plan once they've committed.
@@ -24,6 +27,9 @@ function PlanBox(event, profile) {
   return `
     <div class="plan-box planned">
       <p><strong>✅ You're going</strong> · confidence ${face(plan.before)}${plan.checkedIn ? ` → ${face(plan.after)}` : ""}</p>
+      ${plan.travel
+        ? `<p>${modeEmoji[plan.travel.mode]} ${plan.travel.label}${plan.travel.leave != null ? ` · leave by ${fmtTime(plan.travel.leave)}` : ""}</p>`
+        : ""}
       ${goals.length
         ? `<ul class="plan-goals">${goals
             .map((g) => `<li>${g.done ? "☑️" : "⬜️"} ${challengeById[g.challenge].title}</li>`)
@@ -38,7 +44,7 @@ function PlanBox(event, profile) {
     </div>`;
 }
 
-const ICONS = { up: "✅", down: "➖", block: "🚫" };
+const ICONS = { up: "✅", down: "⚠️", block: "🚫" };
 
 export function EventDetailScreen({ id }) {
   const event = eventById[id];
@@ -71,6 +77,8 @@ export function EventDetailScreen({ id }) {
       </div>
 
       ${PlanBox(event, profile)}
+
+      ${GettingThere(event, profile)}
 
       <h2>About</h2>
       <p>${event.description}</p>
@@ -139,6 +147,13 @@ EventDetailScreen.mount = (root, params) => {
   const event = eventById[params.id];
   root.querySelector('[data-action="go"]')?.addEventListener("click", () => openPlanSheet(event, rerender));
   root.querySelector('[data-action="checkin"]')?.addEventListener("click", () => openCheckInSheet(event, rerender));
+  root.querySelector("[data-buddy]")?.addEventListener("click", () => {
+    const rideBuddies = { ...getProfile().rideBuddies };
+    if (rideBuddies[event.id]) delete rideBuddies[event.id];
+    else rideBuddies[event.id] = true;
+    saveProfile({ rideBuddies });
+    rerender();
+  });
   root.querySelector('[data-action="cancel"]')?.addEventListener("click", () => {
     cancelPlan(event.id);
     rerender();

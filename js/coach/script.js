@@ -17,6 +17,7 @@ const MAIN_MENU = [
   { label: "😬 I'm nervous about an event", next: "nervous-1" },
   { label: "😕 Something didn't go well", next: "rough-1" },
   { label: "🎭 Practice small talk", next: "practice-1" },
+  { label: "🚌 Help me get to an event", next: "travel-1" },
   { label: "💛 I'm feeling lonely", next: "lonely-1" },
 ];
 
@@ -229,6 +230,63 @@ export const nodes = {
     options: [goalOption("show-up"), { label: "Help me turn someone into a friend", next: "goal-deepen" }, { label: "Thanks, that helps", next: "end" }],
   },
 
+  // ── Getting there ───────────────────────────────────────────
+  "travel-1": {
+    say: [
+      "Getting somewhere new can be stressful, especially in a new country. Let's make it simpler.",
+      "What feels hardest about the trip?",
+    ],
+    options: [
+      { label: "I've never taken the bus here", next: "travel-bus" },
+      { label: "It's far or expensive", next: "travel-cost" },
+      { label: "Getting home late worries me", next: "travel-safety" },
+      { label: "Honestly, I'm not sure I want to go", next: "travel-avoid" },
+    ],
+  },
+  "travel-bus": {
+    say: [
+      "Lots of students feel unsure the first time. Every system works a little differently, and nobody explains it.",
+      "A few things that help:\n• Check the route and times under “Getting there” on the event page\n• Get to the stop 5 minutes early\n• Have the fare ready, or ask the driver how to pay. They get asked all the time\n• If you're not sure where to get off, tell the driver where you're going",
+      "And it's okay to ask another rider. Most people are happy to help.",
+    ],
+    options: [goalOption("travel-together"), { label: "What if I miss the bus?", next: "travel-safety" }, { label: "Thanks, that helps", next: "end" }],
+  },
+  "travel-cost": {
+    say: [
+      "That's a real concern, and a smart thing to think about.",
+      "Some ideas:\n• Look for free options first, like walking or a campus shuttle\n• Split a rideshare with others going. Three people means a third of the cost\n• Check the ride buddy section on the event page for students going from campus\n• Ask about student fares on intercity buses",
+      "It's also completely fine to choose events closer to campus. You can change your area anytime in Profile.",
+    ],
+    options: [goalOption("travel-together"), { label: "Change my area", href: "#/profile" }, { label: "Thanks", next: "end" }],
+  },
+  "travel-safety": {
+    say: [
+      "Planning your way home ahead of time is a great idea. It takes a lot of the worry away.",
+      "A simple safety plan:\n• Know the last bus back. It's shown under “Getting there”\n• Share your trip with a friend\n• Keep your phone charged and some money set aside for a rideshare, just in case\n• Going with someone makes the whole trip easier",
+      "If something feels wrong, it's always okay to leave early.",
+    ],
+    options: [goalOption("travel-together"), { label: "Thanks, I feel better", next: "end" }],
+  },
+  "travel-avoid": {
+    say: [
+      "Thank you for being honest. That's a really useful thing to notice.",
+      "Sometimes “it's hard to get there” is partly nerves about the event itself, and that's completely normal.",
+      "Here's a question: if getting there were easy, would you want to go?",
+    ],
+    options: [
+      { label: "Yes, the trip is the hard part", next: "travel-bus" },
+      { label: "No, I'm nervous about the event", next: "nervous-1" },
+      { label: "I'd rather find something closer", next: "travel-closer" },
+    ],
+  },
+  "travel-closer": {
+    say: [
+      "That's a great call. Starting with events close to campus is a smart way to build up confidence.",
+      "Your Picked for you feed already shows what's nearby. You can make your area smaller anytime in Profile.",
+    ],
+    options: [{ label: "See events near me", href: "#/home" }, { label: "Thanks", next: "end" }],
+  },
+
   // ── Small talk role-play ────────────────────────────────────
   "practice-1": {
     say: [
@@ -290,6 +348,7 @@ export const practiceDone = {
 const CRISIS = /suicid|kill myself|end my life|want to die|self[- ]?harm|hurt myself|don'?t want to (live|be here)/i;
 const TOPICS = [
   [/lonely|alone|homesick|miss (home|my family)|no friends/i, "lonely-1"],
+  [/\bbus\b|uber|lyft|rideshare|carpool|\bride\b|travel|get there|getting there|too far|transport/i, "travel-1"],
   [/nervous|scared|anxious|afraid|worried|shy/i, "nervous-1"],
   [/english|language|accent/i, "nervous-language"],
   [/awkward|went (badly|wrong)|rejected|ignored|embarrass/i, "rough-1"],
@@ -303,4 +362,4 @@ export function routeFreeText(text) {
 }
 
 // Entry points from elsewhere in the app, e.g. #/coach?topic=nervous
-export const TOPIC_START = { nervous: "nervous-1", rough: "rough-1", goal: "goal-1", lonely: "lonely-1", practice: "practice-1" };
+export const TOPIC_START = { nervous: "nervous-1", rough: "rough-1", goal: "goal-1", lonely: "lonely-1", practice: "practice-1", travel: "travel-1" };

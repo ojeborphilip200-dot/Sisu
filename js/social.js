@@ -23,10 +23,11 @@ export function deleteGoal(goalId) {
 }
 
 // "I'm going": records how confident the student feels and the goals they picked.
-export function planEvent(eventId, confidenceBefore, challengeIds) {
+// travel: { mode, label, leave } chosen in the plan's "How will you get there?" step, or null.
+export function planEvent(eventId, confidenceBefore, challengeIds, travel = null) {
   const { plans, goals } = getProfile();
   saveProfile({
-    plans: { ...plans, [eventId]: { before: confidenceBefore, after: null, checkedIn: false } },
+    plans: { ...plans, [eventId]: { before: confidenceBefore, after: null, checkedIn: false, travel } },
     goals: goals.filter((g) => g.eventId !== eventId || g.done),
   });
   challengeIds.forEach((id) => addGoal(id, eventId));

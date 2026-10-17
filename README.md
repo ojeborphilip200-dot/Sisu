@@ -30,7 +30,11 @@ js/social.js          Social goals, event check-ins, brave points and badges
 js/coach/script.js    Everything Sisu Coach says (edit this to change the conversation)
 js/data/mock.js       Sample events (description, time, place, attendance, source)
 js/data/sources.js    Sample sources the AI "scans" (fictional, example.edu/.org links)
-js/data/interests.js  Quiz interest and location options
+js/data/interests.js  Quiz interest options
+js/data/places.js     Home campus (SUNY Oneonta), towns students can save, distance helpers
+js/data/transit.js    SAMPLE routes, times and prices for "Getting there" (not real schedules)
+js/travel.js          Works out leave-by times, last-bus warnings, car-free options
+js/components/AreaEditor.js  Map for picking radius + saved places (Leaflet + OpenStreetMap)
 js/data/challenges.js The social ladder: goals from "say hi" to "ask someone to coffee"
 assets/               Images, icons
 ```
