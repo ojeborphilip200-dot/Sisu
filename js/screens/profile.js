@@ -1,6 +1,7 @@
 // Profile: everything Sisu stores or uses about the student, how it's used,
 // and controls to edit, delete, or download it. Transparency is the point of this screen.
 import { interests, locations } from "../data/interests.js";
+import { languages, countries, labelFor } from "../data/background.js";
 import { sourceById } from "../data/sources.js";
 import { eventById } from "../data/mock.js";
 import { challengeById, confidenceScale } from "../data/challenges.js";
@@ -20,6 +21,17 @@ function Section({ id, title, uses, body, empty }) {
       <p class="data-uses"><strong>How Sisu uses this:</strong> ${uses}</p>
       ${body || `<p class="muted data-empty">${empty}</p>`}
     </section>`;
+}
+
+function BackgroundSelect(field, label, options, value) {
+  return `
+    <label class="data-select">
+      <span>${label}</span>
+      <select data-background="${field}">
+        <option value="">Not set</option>
+        ${options.map(([id, name]) => `<option value="${id}" ${value === id ? "selected" : ""}>${name}</option>`).join("")}
+      </select>
+    </label>`;
 }
 
 const deleteBtn = (attrs, label) =>
@@ -46,6 +58,7 @@ export function ProfileScreen() {
 
     <div class="data-jump">
       <a href="#" data-jump="d-account">Account</a>
+      <a href="#" data-jump="d-background">Language & country</a>
       <a href="#" data-jump="d-interests">Interests</a>
       <a href="#" data-jump="d-location">Location</a>
       <a href="#" data-jump="d-sources">Sources</a>
@@ -63,6 +76,21 @@ export function ProfileScreen() {
           <li><span><strong>Name</strong><small>Not set in this prototype</small></span></li>
           <li><span><strong>University email</strong><small>Not set in this prototype</small></span></li>
         </ul>`,
+    })}
+
+    ${Section({
+      id: "d-background",
+      title: "Language & home country",
+      uses: "Lets Sisu show the app in your language and highlight events connected to your home culture. Never shown to other students unless you choose to share it.",
+      body: `
+        <div class="data-selects">
+          ${BackgroundSelect("language", "Preferred language", languages, profile.language)}
+          ${BackgroundSelect("country", "Country of origin", countries, profile.country)}
+        </div>
+        ${profile.language || profile.country
+          ? `<button type="button" class="button-outline-dark data-clear-bg" data-clear-background>🗑️ Delete language & country</button>`
+          : ""}
+        <p class="data-hint">Changes save right away. Choose “Not set” to remove one.</p>`,
     })}
 
     ${Section({
@@ -198,6 +226,8 @@ function exportData() {
   return {
     exportedAt: new Date().toISOString(),
     about: "Everything Sisu has stored about you, as shown on your Sisu Profile page.",
+    preferredLanguage: labelFor(languages, profile.language),
+    countryOfOrigin: labelFor(countries, profile.country),
     interests: profile.interests.map((id) => interests.find((i) => i.id === id)?.label ?? id),
     location: locations.find((l) => l.id === profile.location)?.label ?? null,
     sourcePreferences: Object.entries(profile.sourcePrefs).map(([id, pref]) => ({ source: sourceById[id]?.name ?? id, preference: pref })),
@@ -271,6 +301,23 @@ ProfileScreen.mount = (root) => {
     saveProfile({ interests: [...set] });
     rerender();
   });
+
+  root.querySelectorAll("[data-background]").forEach((sel) =>
+    sel.addEventListener("change", () => {
+      saveProfile({ [sel.dataset.background]: sel.value || null });
+      rerender();
+    })
+  );
+
+  on("[data-clear-background]", () =>
+    confirmSheet(
+      { title: "Delete language & country?", body: "Sisu will no longer know your preferred language or home country.", confirmLabel: "Delete", danger: true },
+      () => {
+        saveProfile({ language: null, country: null });
+        rerender();
+      }
+    )
+  );
 
   on("[data-location]", (el) => {
     saveProfile({ location: el.dataset.location });
@@ -363,7 +410,7 @@ ProfileScreen.mount = (root) => {
     confirmSheet(
       {
         title: "Delete all your data?",
-        body: "This permanently erases your interests, settings, source preferences, events, goals, points, and Coach conversations. It can't be undone. You may want to download your data first.",
+        body: "This permanently erases your language and country, interests, settings, source preferences, events, goals, points, and Coach conversations. It can't be undone. You may want to download your data first.",
         confirmLabel: "Yes, delete everything",
         danger: true,
       },

@@ -1,46 +1,7 @@
 // Three-step onboarding quiz shown after "Get started": background, interests, then location preference.
 import { interests, locations } from "../data/interests.js";
+import { languages, countries } from "../data/background.js";
 import { getProfile, saveProfile } from "../state.js";
-
-const languages = [
-  ["en", "English"],
-  ["ar", "العربية · Arabic"],
-  ["zh", "中文 · Chinese"],
-  ["fr", "Français · French"],
-  ["hi", "हिन्दी · Hindi"],
-  ["ja", "日本語 · Japanese"],
-  ["ko", "한국어 · Korean"],
-  ["pt", "Português · Portuguese"],
-  ["es", "Español · Spanish"],
-  ["tr", "Türkçe · Turkish"],
-  ["vi", "Tiếng Việt · Vietnamese"],
-  ["other", "Another language"],
-];
-
-const countries = [
-  ["br", "🇧🇷 Brazil"],
-  ["cn", "🇨🇳 China"],
-  ["co", "🇨🇴 Colombia"],
-  ["eg", "🇪🇬 Egypt"],
-  ["fr", "🇫🇷 France"],
-  ["de", "🇩🇪 Germany"],
-  ["gh", "🇬🇭 Ghana"],
-  ["in", "🇮🇳 India"],
-  ["it", "🇮🇹 Italy"],
-  ["jp", "🇯🇵 Japan"],
-  ["ke", "🇰🇪 Kenya"],
-  ["mx", "🇲🇽 Mexico"],
-  ["np", "🇳🇵 Nepal"],
-  ["ng", "🇳🇬 Nigeria"],
-  ["pk", "🇵🇰 Pakistan"],
-  ["ph", "🇵🇭 Philippines"],
-  ["kr", "🇰🇷 South Korea"],
-  ["es", "🇪🇸 Spain"],
-  ["tr", "🇹🇷 Türkiye"],
-  ["vn", "🇻🇳 Vietnam"],
-  ["other", "🌍 Another country"],
-  ["prefer-not", "Prefer not to say"],
-];
 
 function QuizShell({ step, total, title, subtitle, body, backHref, nextLabel }) {
   return `
@@ -111,7 +72,7 @@ export function QuizAboutScreen() {
         value: country,
         options: countries,
       })}
-      <p class="quiz-privacy">Your answers stay on this device.</p>
+      <p class="quiz-privacy">You can see, change, or delete this anytime in your Profile.</p>
     </div>`,
     backHref: "#/",
     nextLabel: "Continue",
