@@ -35,12 +35,12 @@ export function OnboardingScreen() {
 
       <div class="onboarding-copy">
         <h1>Sisu</h1>
-        <p>Find your people, wherever you're from.</p>
+        <p>Discover welcoming experiences</p>
       </div>
 
       <div class="onboarding-actions">
-        <!-- TODO: point these to sign-up and login screens once they exist. -->
-        <a href="#/home" class="button button-light">Get started</a>
+        <!-- TODO: point Log in to a login screen once it exists. -->
+        <a href="#/quiz/interests" class="button button-light">Get started</a>
         <a href="#/home" class="button button-outline">Log in</a>
       </div>
     </section>

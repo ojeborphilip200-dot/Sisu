@@ -6,6 +6,8 @@ export function startRouter({ routes, notFound, outlet, onNavigate }) {
     const screen = route ? route.screen : notFound;
     outlet.innerHTML = screen();
     outlet.scrollTop = 0;
+    // Interactive screens attach event listeners in an optional mount(outlet).
+    screen.mount?.(outlet);
     onNavigate?.(path, route);
   }
 
