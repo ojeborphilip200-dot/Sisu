@@ -40,7 +40,7 @@ export function OnboardingScreen() {
 
       <div class="onboarding-actions">
         <!-- TODO: point Log in to a login screen once it exists. -->
-        <a href="#/quiz/interests" class="button button-light">Get started</a>
+        <a href="#/quiz/about" class="button button-light">Get started</a>
         <a href="#/home" class="button button-outline">Log in</a>
       </div>
     </section>

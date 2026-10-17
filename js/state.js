@@ -5,8 +5,15 @@ const KEY = "sisu.profile";
 // goals: [{ id, challenge, eventId | null, done }] — see js/social.js.
 // coachHistory: [{ from, text, at }] — saved only while rememberChats is on.
 const DEFAULTS = {
-  interests: [], location: null, sourcePrefs: {}, plans: {}, goals: [],
-  coachHistory: [], rememberChats: true,
+  language: null,
+  country: null,
+  interests: [],
+  location: null,
+  sourcePrefs: {},
+  plans: {},
+  goals: [],
+  coachHistory: [],
+  rememberChats: true,
 };
 
 export function getProfile() {

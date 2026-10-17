@@ -2,7 +2,7 @@
 import { startRouter } from "./router.js";
 import { TabBar } from "./components/TabBar.js";
 import { OnboardingScreen } from "./screens/onboarding.js";
-import { QuizInterestsScreen, QuizLocationScreen } from "./screens/quiz.js";
+import { QuizAboutScreen, QuizInterestsScreen, QuizLocationScreen } from "./screens/quiz.js";
 import { HomeScreen } from "./screens/home.js";
 import { EventsScreen } from "./screens/events.js";
 import { EventDetailScreen } from "./screens/event-detail.js";
@@ -16,6 +16,7 @@ import { NotFoundScreen } from "./screens/not-found.js";
 // Set `tab` to show it in the bottom navigation, `fullscreen` to hide the app chrome.
 const routes = [
   { path: "/", screen: OnboardingScreen, fullscreen: true },
+  { path: "/quiz/about", screen: QuizAboutScreen, fullscreen: true },
   { path: "/quiz/interests", screen: QuizInterestsScreen, fullscreen: true },
   { path: "/quiz/location", screen: QuizLocationScreen, fullscreen: true },
   { path: "/home", screen: HomeScreen, tab: "Home" },
