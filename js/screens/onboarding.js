@@ -34,7 +34,7 @@ export function OnboardingScreen() {
       </div>
 
       <div class="onboarding-copy">
-        <h1>Sisu</h1>
+        <img class="onboarding-logo" src="assets/sisu-logo.png" alt="Sisu" />
         <p>Discover welcoming experiences</p>
       </div>
 

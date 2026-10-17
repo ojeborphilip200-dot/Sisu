@@ -137,15 +137,15 @@
   animation: rise 0.7s ease-out 0.3s both;
 }
 
-.onboarding-copy h1 {
-  margin: 0;
-  font-size: 2.75rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+.onboarding-logo {
+  display: block;
+  width: min(250px, 78vw);
+  height: auto;
+  margin: 0 auto;
 }
 
 .onboarding-copy p {
-  margin: 4px 0 0;
+  margin: 10px 0 0;
   font-size: 1.05rem;
   opacity: 0.9;
 }
