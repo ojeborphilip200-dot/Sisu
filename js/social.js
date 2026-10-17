@@ -17,6 +17,11 @@ export function setGoalDone(goalId, done) {
   saveProfile({ goals: goals.map((g) => (g.id === goalId ? { ...g, done } : g)) });
 }
 
+export function deleteGoal(goalId) {
+  const { goals } = getProfile();
+  saveProfile({ goals: goals.filter((g) => g.id !== goalId) });
+}
+
 // "I'm going": records how confident the student feels and the goals they picked.
 export function planEvent(eventId, confidenceBefore, challengeIds) {
   const { plans, goals } = getProfile();
