@@ -141,7 +141,7 @@
   display: block;
   width: min(250px, 78vw);
   height: auto;
-  margin: 0 auto;
+  margin: 0 auto 10px;
 }
 
 .onboarding-copy p {

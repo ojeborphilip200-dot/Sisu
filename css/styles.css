@@ -47,15 +47,19 @@ html, body {
 .device.fullscreen .app-main { padding: 0; }
 
 .app-header {
-  padding: var(--space);
+  padding: 10px var(--space);
   border-bottom: 1px solid var(--color-border);
 }
 
 .brand {
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: var(--color-primary);
-  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand img {
+  display: block;
+  height: 42px;
+  width: auto;
 }
 
 .app-main {
