@@ -5,6 +5,10 @@ import { OnboardingScreen } from "./screens/onboarding.js";
 import { QuizInterestsScreen, QuizLocationScreen } from "./screens/quiz.js";
 import { HomeScreen } from "./screens/home.js";
 import { EventsScreen } from "./screens/events.js";
+import { EventDetailScreen } from "./screens/event-detail.js";
+import { SourcesScreen } from "./screens/sources.js";
+import { GoalsScreen } from "./screens/goals.js";
+import { CoachScreen } from "./screens/coach.js";
 import { ProfileScreen } from "./screens/profile.js";
 import { NotFoundScreen } from "./screens/not-found.js";
 
@@ -16,6 +20,10 @@ const routes = [
   { path: "/quiz/location", screen: QuizLocationScreen, fullscreen: true },
   { path: "/home", screen: HomeScreen, tab: "Home" },
   { path: "/events", screen: EventsScreen, tab: "Events" },
+  { path: "/event/:id", screen: EventDetailScreen },
+  { path: "/goals", screen: GoalsScreen, tab: "Goals" },
+  { path: "/coach", screen: CoachScreen, fullscreen: true },
+  { path: "/sources", screen: SourcesScreen, tab: "Sources" },
   { path: "/profile", screen: ProfileScreen, tab: "Profile" },
 ];
 

@@ -1,15 +1,34 @@
-import { Card } from "../components/Card.js";
-import { events } from "../data/mock.js";
+import { EventCard } from "../components/EventCard.js";
+import { events, eventById } from "../data/mock.js";
 import { interests } from "../data/interests.js";
 import { getProfile } from "../state.js";
+import { pickedFor } from "../curation.js";
 
-// Events that match the student's quiz answers.
-function pickedFor(profile) {
-  return events.filter(
-    (e) =>
-      profile.interests.includes(e.category) &&
-      (profile.location === "community" || e.onCampus)
-  );
+// Top-of-feed nudge toward real-world connection: check in on a past plan, or try the coach.
+function Nudge(profile) {
+  const pending = Object.entries(profile.plans).find(([, p]) => !p.checkedIn);
+  if (pending) {
+    const event = eventById[pending[0]];
+    return `<a class="card nudge" href="#/goals">
+      <p class="nudge-label">Your plan</p>
+      <h3>🙋 ${event.title}</h3>
+      <p>Been yet? Check in to see how your confidence is growing and earn brave points.</p>
+    </a>`;
+  }
+  return `<a class="card nudge" href="#/coach?topic=goal">
+    <p class="nudge-label">This week</p>
+    <h3>🎯 Set a small social goal</h3>
+    <p>Sisu Coach can help you pick one that feels doable.</p>
+  </a>`;
+}
+
+// One-line "why" for a feed card: the strongest reason (a "see more" request beats an interest match),
+// plus a count of the rest. The event page lists them all.
+function summarize(reasons) {
+  const ups = reasons.filter((r) => r.effect === "up");
+  const top = ups.find((r) => r.text.startsWith("You asked")) || ups[0];
+  const rest = ups.length - 1;
+  return rest > 0 ? `${top.text} · +${rest} more reason${rest > 1 ? "s" : ""}` : top.text;
 }
 
 export function HomeScreen() {
@@ -27,20 +46,19 @@ export function HomeScreen() {
     .filter((i) => profile.interests.includes(i.id))
     .map((i) => `<span class="chip">${i.emoji} ${i.label}</span>`)
     .join("");
-  const picks = pickedFor(profile);
+  const picks = pickedFor(events, profile);
 
   return `
     <h1>Picked for you</h1>
     <div class="chips">${labels}</div>
     <p class="muted">${profile.location === "community" ? "On campus and around town" : "On campus"} ·
       <a href="#/quiz/interests">Edit</a></p>
+    ${Nudge(profile)}
+    <p class="feed-explainer">✨ Sisu AI found these on campus and community calendars and ranked them by
+      your interests. Tap any event to see exactly why it's here. <a href="#/sources">Sources</a></p>
     ${
       picks.length
-        ? picks
-            .map((e) =>
-              Card({ title: e.title, body: `${e.when} · ${e.where}${e.onCampus ? "" : " · Community"}` })
-            )
-            .join("")
+        ? picks.map((p) => EventCard(p.event, { reason: summarize(p.reasons) })).join("")
         : `<p class="muted">No matches yet. Try adding more interests.</p>`
     }
     <a href="#/events" class="button">Browse all events</a>

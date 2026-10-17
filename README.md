@@ -24,7 +24,14 @@ js/app.js             Route list — register new screens here
 js/router.js          Hash router (#/events), works on GitHub Pages as-is
 js/components/        Reusable UI pieces (functions that return HTML strings)
 js/screens/           One file per screen
-js/data/mock.js       Fake data for the demo
+js/curation.js        The visible "algorithm": rules that rank events and explain why
+js/state.js           Quiz answers, see more/less choices, plans and goals (saved in the browser)
+js/social.js          Social goals, event check-ins, brave points and badges
+js/coach/script.js    Everything Sisu Coach says (edit this to change the conversation)
+js/data/mock.js       Sample events (description, time, place, attendance, source)
+js/data/sources.js    Sample sources the AI "scans" (fictional, example.edu/.org links)
+js/data/interests.js  Quiz interest and location options
+js/data/challenges.js The social ladder: goals from "say hi" to "ask someone to coffee"
 assets/               Images, icons
 ```
 

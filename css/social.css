@@ -1,0 +1,364 @@
+/* ── Bottom sheet ───────────────────────────────────────── */
+.device { position: relative; }
+
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(20, 25, 40, 0.45);
+  animation: fade-in 0.2s ease-out;
+}
+
+.sheet {
+  width: 100%;
+  max-height: 88%;
+  overflow-y: auto;
+  padding: 24px 20px 28px;
+  border-radius: 24px 24px 0 0;
+  background: var(--color-surface);
+  animation: sheet-up 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.sheet h2 { margin: 0 0 6px; font-size: 1.25rem; line-height: 1.3; }
+.sheet > p { margin: 0 0 12px; font-size: 0.9rem; }
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+
+.sheet-primary { width: 100%; margin-top: 16px; padding: 14px; font-size: 1rem; }
+.sheet-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.sheet-secondary {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sheet-note { font-size: 0.8rem !important; color: var(--color-muted); }
+
+/* ── Confidence scale ───────────────────────────────────── */
+.conf-scale { display: flex; gap: 6px; margin: 8px 0 12px; }
+
+.conf-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 2px;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.conf-emoji { font-size: 1.6rem; line-height: 1; }
+.conf-label { font-size: 0.62rem; color: var(--color-muted); line-height: 1.2; text-align: center; }
+.conf-btn.selected { border-color: var(--color-primary); background: #eef2ff; transform: scale(1.06); }
+
+/* ── Goal tiles (picker + check-in) ─────────────────────── */
+.goal-tiles { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+
+.goal-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.goal-tile span:nth-child(2) { flex: 1; }
+.goal-tile.selected { border-color: var(--color-primary); background: #eef2ff; }
+
+.pts {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #fff4e6;
+  color: #d9480f;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rec-label { margin: 12px 0 0 !important; font-size: 0.85rem !important; }
+
+.more-goals { margin-top: 4px; font-size: 0.85rem; }
+.more-goals summary { cursor: pointer; color: var(--color-primary); font-weight: 600; padding: 4px 0; }
+
+.tip-card {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f3f0ff;
+  font-size: 0.9rem;
+}
+
+.tip-card p { margin: 4px 0 0; color: #5f3dc4; }
+
+/* ── Celebration ────────────────────────────────────────── */
+.celebrate { text-align: center; }
+.celebrate h2 { font-size: 1.5rem; }
+
+.celebrate-emoji {
+  font-size: 3rem;
+  animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pop { from { transform: scale(0.2) rotate(-20deg); opacity: 0; } }
+
+.conf-compare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 12px 0;
+}
+
+.conf-compare div { display: flex; flex-direction: column; align-items: center; font-size: 2rem; }
+.conf-compare small { font-size: 0.7rem; color: var(--color-muted); }
+.conf-compare .arrow { font-size: 1.4rem; color: var(--color-muted); }
+
+/* ── Plan box on event page ─────────────────────────────── */
+.plan-box { margin-top: 16px; }
+.plan-go { width: 100%; padding: 14px; font-size: 1rem; }
+.plan-box .sheet-note { margin: 6px 0 0; text-align: center; }
+
+.plan-box.planned {
+  padding: 14px;
+  border-radius: var(--radius);
+  background: #ebfbee;
+  font-size: 0.9rem;
+}
+
+.plan-box.planned p { margin: 0 0 6px; }
+.plan-goals { margin: 6px 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.plan-actions { margin-top: 8px; }
+.plan-actions .button { width: 100%; }
+
+/* ── Goals screen ───────────────────────────────────────── */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; }
+
+.stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 4px;
+  border-radius: var(--radius);
+  background: #fff4e6;
+}
+
+.stats strong { font-size: 1.5rem; color: #d9480f; }
+.stats span { font-size: 0.7rem; color: var(--color-muted); text-align: center; }
+
+.coach-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, #4c6ef5, #7048e8);
+  color: #fff;
+  text-decoration: none;
+}
+
+.coach-cta small { opacity: 0.85; }
+
+.coach-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 1.4rem;
+}
+
+.app-main h2 { margin: 24px 0 10px; font-size: 1.1rem; }
+
+.ladder { display: flex; flex-direction: column; gap: 6px; }
+
+.rung {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  color: var(--color-muted);
+}
+
+.rung.reached { border-style: solid; border-color: #40c057; background: #ebfbee; color: var(--color-text); }
+.rung-emoji { font-size: 1.4rem; }
+.rung-text { flex: 1; display: flex; flex-direction: column; }
+.rung-text small { font-size: 0.75rem; color: var(--color-muted); }
+.rung-count { font-size: 0.8rem; font-weight: 600; }
+
+.nudge { display: block; margin-top: 16px; border-color: #ffd8a8; background: #fff9f0; color: inherit; text-decoration: none; }
+.nudge h3 { margin: 2px 0 4px; }
+
+.nudge-label {
+  font-size: 0.7rem !important;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #d9480f !important;
+}
+
+.button.small { margin-top: 10px; padding: 8px 14px; font-size: 0.85rem; }
+
+.plan-card a { color: inherit; text-decoration: none; }
+
+.goal-list { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+ul.goal-list.card { padding: var(--space); }
+
+.goal-row { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+.goal-text { flex: 1; }
+.goal-row.done .goal-text { color: var(--color-muted); text-decoration: line-through; }
+
+.goal-check {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--color-border);
+  border-radius: 7px;
+  background: var(--color-surface);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.goal-row.done .goal-check { border-color: #40c057; background: #40c057; }
+
+.badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 6px;
+  border-radius: 12px;
+  background: var(--color-bg);
+  text-align: center;
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+
+.badge span { font-size: 1.6rem; }
+.badge strong { font-size: 0.72rem; line-height: 1.2; }
+.badge small { font-size: 0.62rem; color: var(--color-muted); line-height: 1.25; }
+.badge.earned { opacity: 1; filter: none; background: #fff4e6; }
+
+/* ── Coach chat ─────────────────────────────────────────── */
+.coach { display: flex; flex-direction: column; height: 100%; }
+
+.coach-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.coach-header .coach-avatar { background: #ebfbee; }
+.coach-header div { display: flex; flex-direction: column; }
+.coach-header small { font-size: 0.72rem; color: var(--color-muted); }
+
+.chat-log {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.msg {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  animation: msg-in 0.25s ease-out;
+}
+
+@keyframes msg-in { from { opacity: 0; transform: translateY(6px); } }
+
+.msg-coach { align-self: flex-start; background: var(--color-bg); border-bottom-left-radius: 6px; }
+.msg-me { align-self: flex-end; background: var(--color-primary); color: #fff; border-bottom-right-radius: 6px; }
+
+.typing { display: flex; gap: 4px; }
+.typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-muted);
+  animation: blink 1s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.15s; }
+.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes blink { 50% { opacity: 0.3; } }
+
+.chat-options { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px; }
+.chat-options:not(:empty) { padding-bottom: 10px; }
+
+.chip-btn {
+  padding: 8px 12px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.chip-btn:hover { background: #eef2ff; }
+
+.chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px 4px;
+  border-top: 1px solid var(--color-border);
+}
+
+.chat-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.chat-input .button { padding: 10px 16px; }
+
+.coach-disclaimer { margin: 0; padding: 4px 16px 10px; font-size: 0.7rem; color: var(--color-muted); text-align: center; }
+
+.device.fullscreen .app-main:has(.coach) { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .sheet-backdrop, .msg, .celebrate-emoji { animation: none; }
+}
