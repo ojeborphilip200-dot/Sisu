@@ -3,7 +3,15 @@
 const KEY = "sisu.profile";
 // plans: { [eventId]: { before, after, checkedIn } } — confidence ratings around an event.
 // goals: [{ id, challenge, eventId | null, done }] — see js/social.js.
-const DEFAULTS = { interests: [], location: null, sourcePrefs: {}, plans: {}, goals: [] };
+const DEFAULTS = {
+  language: null,
+  country: null,
+  interests: [],
+  location: null,
+  sourcePrefs: {},
+  plans: {},
+  goals: [],
+};
 
 export function getProfile() {
   try {

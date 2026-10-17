@@ -1,6 +1,46 @@
-// Two-step onboarding quiz shown after "Get started": interests, then location preference.
+// Three-step onboarding quiz shown after "Get started": background, interests, then location preference.
 import { interests, locations } from "../data/interests.js";
 import { getProfile, saveProfile } from "../state.js";
+
+const languages = [
+  ["en", "English"],
+  ["ar", "العربية · Arabic"],
+  ["zh", "中文 · Chinese"],
+  ["fr", "Français · French"],
+  ["hi", "हिन्दी · Hindi"],
+  ["ja", "日本語 · Japanese"],
+  ["ko", "한국어 · Korean"],
+  ["pt", "Português · Portuguese"],
+  ["es", "Español · Spanish"],
+  ["tr", "Türkçe · Turkish"],
+  ["vi", "Tiếng Việt · Vietnamese"],
+  ["other", "Another language"],
+];
+
+const countries = [
+  ["br", "🇧🇷 Brazil"],
+  ["cn", "🇨🇳 China"],
+  ["co", "🇨🇴 Colombia"],
+  ["eg", "🇪🇬 Egypt"],
+  ["fr", "🇫🇷 France"],
+  ["de", "🇩🇪 Germany"],
+  ["gh", "🇬🇭 Ghana"],
+  ["in", "🇮🇳 India"],
+  ["it", "🇮🇹 Italy"],
+  ["jp", "🇯🇵 Japan"],
+  ["ke", "🇰🇪 Kenya"],
+  ["mx", "🇲🇽 Mexico"],
+  ["np", "🇳🇵 Nepal"],
+  ["ng", "🇳🇬 Nigeria"],
+  ["pk", "🇵🇰 Pakistan"],
+  ["ph", "🇵🇭 Philippines"],
+  ["kr", "🇰🇷 South Korea"],
+  ["es", "🇪🇸 Spain"],
+  ["tr", "🇹🇷 Türkiye"],
+  ["vn", "🇻🇳 Vietnam"],
+  ["other", "🌍 Another country"],
+  ["prefer-not", "Prefer not to say"],
+];
 
 function QuizShell({ step, total, title, subtitle, body, backHref, nextLabel }) {
   return `
@@ -33,17 +73,78 @@ function OptionTile({ id, emoji, label, hint, selected }) {
   `;
 }
 
+function SelectField({ id, label, placeholder, value, options }) {
+  return `
+    <label class="quiz-field" for="${id}">
+      <span class="quiz-field-label">${label}</span>
+      <select class="quiz-select" id="${id}" name="${id}">
+        <option value="">${placeholder}</option>
+        ${options
+          .map(([optionValue, optionLabel]) =>
+            `<option value="${optionValue}" ${value === optionValue ? "selected" : ""}>${optionLabel}</option>`
+          )
+          .join("")}
+      </select>
+    </label>
+  `;
+}
+
+export function QuizAboutScreen() {
+  const { language, country } = getProfile();
+  return QuizShell({
+    step: 1,
+    total: 3,
+    title: "Tell us about you",
+    subtitle: "We'll use this to make your Sisu experience feel more relevant.",
+    body: `<div class="quiz-fields">
+      ${SelectField({
+        id: "language",
+        label: "Preferred language",
+        placeholder: "Choose a language",
+        value: language,
+        options: languages,
+      })}
+      ${SelectField({
+        id: "country",
+        label: "Country of origin",
+        placeholder: "Choose a country",
+        value: country,
+        options: countries,
+      })}
+      <p class="quiz-privacy">Your answers stay on this device.</p>
+    </div>`,
+    backHref: "#/",
+    nextLabel: "Continue",
+  });
+}
+
+QuizAboutScreen.mount = (root) => {
+  const language = root.querySelector("#language");
+  const country = root.querySelector("#country");
+  const next = root.querySelector(".quiz-next");
+  const update = () => { next.disabled = !language.value || !country.value; };
+
+  language.addEventListener("change", update);
+  country.addEventListener("change", update);
+  update();
+
+  next.addEventListener("click", () => {
+    saveProfile({ language: language.value, country: country.value });
+    location.hash = "#/quiz/interests";
+  });
+};
+
 export function QuizInterestsScreen() {
   const { interests: chosen } = getProfile();
   return QuizShell({
-    step: 1,
-    total: 2,
+    step: 2,
+    total: 3,
     title: "Welcome! 👋<br />What are you into?",
     subtitle: "Pick as many as you like. We'll use these to suggest activities and events for you.",
     body: `<div class="option-grid">${interests
       .map((i) => OptionTile({ ...i, selected: chosen.includes(i.id) }))
       .join("")}</div>`,
-    backHref: "#/",
+    backHref: "#/quiz/about",
     nextLabel: "Continue",
   });
 }
@@ -73,8 +174,8 @@ QuizInterestsScreen.mount = (root) => {
 export function QuizLocationScreen() {
   const { location: chosen } = getProfile();
   return QuizShell({
-    step: 2,
-    total: 2,
+    step: 3,
+    total: 3,
     title: "Where do you want to explore?",
     subtitle: "You can change this anytime.",
     body: `<div class="option-list">${locations
